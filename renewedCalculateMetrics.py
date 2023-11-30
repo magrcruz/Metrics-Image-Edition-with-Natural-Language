@@ -1,3 +1,4 @@
+# Working version
 from transformers import (
     CLIPTokenizer,
     CLIPTextModelWithProjection,
@@ -13,6 +14,8 @@ from PIL import Image
 import torch.nn as nn
 import torch.nn.functional as F
 import json
+import csv
+import sys
 
 class MyMetrics(nn.Module):
     def __init__(self, tokenizer, text_encoder, image_processor, image_encoder):
@@ -97,9 +100,20 @@ modified_captions = []
 edited_images = []
 
 root = "C:/Tesis/pnp-diffusers/"
-folder = "C:/Tesis/pnp-diffusers/config"
+folder = "C:/Tesis/pnp-diffusers/config/50_steps"
 
 yamls = [f for f in os.listdir(folder) if f.endswith('.yaml')]
+
+csv_file_path = 'captionings.csv'
+
+# Diccionario para almacenar los captions
+captions_dict = {}
+
+# Abrir el archivo CSV y guardar los captions en el diccionario
+with open(csv_file_path, 'r') as csv_file:
+    reader = csv.DictReader(csv_file)
+    for row in reader:
+        captions_dict[row['img']] = row['blip2']
 
 
 for file in yamls:
@@ -111,9 +125,20 @@ for file in yamls:
         edited_image = root + output_dir + "/output-"+prompt+".png"
 
         input_images.append(original_image_path)
-        original_captions.append("")
+        #original_captions.append("")
+        original_captions.append(captions_dict.get(os.path.basename(original_image_path), ""))
+
         edited_images.append(edited_image)
         modified_captions.append(prompt)
+
+missingFiles = 0
+for editedImg in edited_images:
+    if not os.path.exists(editedImg):
+        missingFiles+=1
+        print("Missing file: "+editedImg)
+
+if missingFiles:
+    sys.exit() 
 
 sum_directional_similarity = 0.0
 sum_cosine_similarity_I = 0.0
@@ -155,5 +180,5 @@ mean_output = {
 #with open('datos.json', 'w') as archivo:
 #    json.dump(scores, archivo)
 
-with open('results.json', 'w') as archivo:
+with open('resultsBLIP2_50.json', 'w') as archivo:
     json.dump(mean_output, archivo)

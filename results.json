@@ -1,0 +1,7 @@
+{
+    "BLIP2_25Steps": {"Directional_similarity": 0.1256139513066749, "Clip-I": 0.212752065861348, "Clip-T": 0.24332491116425425},
+    "BLIP2_50Steps": {"Directional_similarity": 0.12538532869525484, "Clip-I": 0.212752065861348, "Clip-T": 0.24312892187501967},
+    "BLIP2_100Steps": {"Directional_similarity": 0.12742300222138153, "Clip-I": 0.212752065861348, "Clip-T": 0.24348349761717097},
+    "BLIP2_200Steps": {"Directional_similarity": 0.1283732430106893, "Clip-I": 0.212752065861348, "Clip-T": 0.24382465432599648},
+    "WO_50Steps": {"Directional_similarity": 0.061810590288380984, "Clip-I": 0.212752065861348, "Clip-T": 0.2374823786241492}   
+}
